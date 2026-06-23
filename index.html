@@ -1,0 +1,952 @@
+<!-- v1.0 | 2026-06-23 | 初版建立：金錢人格測驗（6型T1類型卡片）+ 財富矩陣互引 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>金錢人格測驗｜你的致富心態是哪一種？</title>
+<meta name="description" content="10題情境測驗，揭示你對金錢最深層的心理模式。不是測你有多少錢，是測你用什麼心態和錢相處。"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ── CSS：重置與全域變數 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A0F;--s1:#14141F;--s2:#1C1C2A;--s3:#242435;
+  --border:rgba(255,255,255,0.07);--text:#EDEFF5;--muted:#9090A8;
+  --gold:#C4A96A;--gold-l:#E8C86A;
+  --r:18px;--ease:.26s cubic-bezier(.4,0,.2,1);
+  --acc:#C4A040;--acc-b:#D8B850;
+  --cF:#5888C4;--cV:#C47058;--cC:#8A5EC4;
+  --cS:#58A898;--cM:#C4A040;--cK:#7890B0;
+}
+html{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px 60px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 90% 55% at 50% -5%,rgba(91,141,184,.15) 0%,transparent 65%),
+  radial-gradient(ellipse 50% 35% at 100% 90%,rgba(196,169,106,.08) 0%,transparent 55%);
+  pointer-events:none;z-index:0}
+
+/* ── CSS：Particles / Orbs / Cursor ── */
+#particles-js{position:fixed;inset:0;z-index:0;pointer-events:none}
+#mori-blobs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;filter:blur(72px)}
+.mblob{position:absolute;border-radius:50%;mix-blend-mode:screen;will-change:transform}
+.mblob--a{width:70vw;height:70vw;top:-18%;left:-15%;background:radial-gradient(circle,rgba(196,160,64,.18) 0%,transparent 65%);animation:moriDrift 28s ease-in-out infinite}
+.mblob--b{width:58vw;height:58vw;top:8%;right:-18%;background:radial-gradient(circle,rgba(91,141,184,.14) 0%,transparent 65%);animation:moriDrift 28s ease-in-out -10s infinite}
+.mblob--c{width:52vw;height:52vw;bottom:-22%;left:18%;background:radial-gradient(circle,rgba(196,169,106,.10) 0%,transparent 65%);animation:moriDrift 28s ease-in-out -20s infinite}
+@keyframes moriDrift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(7%,-5%) scale(1.1)}66%{transform:translate(-5%,7%) scale(.92)}}
+*{cursor:none}
+#cursor-fx{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;will-change:transform}
+.cur-dot{width:6px;height:6px;background:var(--gold);transform:translate3d(-200px,-200px,0) translate(-50%,-50%);transition:width .12s,height .12s}
+.cur-ring{width:28px;height:28px;border:1.5px solid rgba(196,169,106,.45);background:transparent;transform:translate3d(-200px,-200px,0) translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s,background .18s}
+.cur-ring.is-locked{width:42px;height:42px;border-color:rgba(196,169,106,.75);background:rgba(196,169,106,.06)}
+.cur-ring.is-down{width:18px;height:18px;background:rgba(196,169,106,.1)}
+#cursor-spotlight{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(220px at -999px -999px,rgba(196,160,64,.15),transparent 70%)}
+
+/* ── CSS：畫面切換 ── */
+.screen{display:none;width:100%;max-width:680px;position:relative;z-index:1;animation:fadeUp .36s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r)}
+.gap{height:8px}
+
+/* ── CSS：歡迎頁 ── */
+#screen-welcome .card{padding:52px 44px;text-align:center}
+.badge-pill{display:inline-block;background:rgba(196,160,64,.1);border:1px solid rgba(196,160,64,.28);color:var(--acc);padding:5px 18px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:28px}
+.hero-h1{font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.18;margin-bottom:16px;background:linear-gradient(140deg,#fff 20%,var(--gold-l) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:15px;line-height:1.9;margin-bottom:32px;max-width:440px;margin-left:auto;margin-right:auto;color:var(--muted)}
+.stats-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.stat-chip{background:var(--s2);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:13px;color:var(--muted)}
+.stat-chip strong{color:var(--text)}
+.sym-head{margin-bottom:20px}
+.sym-lbl{font-size:clamp(17px,3vw,21px);font-weight:900;color:var(--text);margin-bottom:8px}
+.sym-hint{font-size:13px;color:var(--muted)}
+.sym-grid{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
+.sym-item{background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:12px 15px;font-size:13.5px;line-height:1.55;cursor:pointer;transition:var(--ease);display:flex;gap:11px;align-items:flex-start;text-align:left}
+.sym-item:hover{border-color:rgba(196,160,64,.32)}
+.sym-item.picked{border-color:var(--acc);background:rgba(196,160,64,.07)}
+.sym-ltr{width:24px;min-width:24px;height:24px;border-radius:6px;background:var(--s1);border:1.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--muted);flex-shrink:0;margin-top:1px;transition:var(--ease)}
+.sym-item.picked .sym-ltr{background:var(--acc);border-color:var(--acc);color:#0A0A0F}
+.sym-txt{color:var(--muted);transition:var(--ease)}
+.sym-item.picked .sym-txt{color:var(--text)}
+.sym-count{font-size:12px;color:var(--muted);margin-bottom:28px;min-height:20px}
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-l) 100%);color:#0A0A0F;border:none;border-radius:100px;padding:17px 48px;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit;letter-spacing:.02em;width:100%;transition:var(--ease)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(196,169,106,.3)}
+.btn-gold:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── CSS：測驗頁 ── */
+#screen-quiz{padding-top:0}
+.quiz-prog-wrap{margin-bottom:16px}
+.quiz-prog-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.prog-dim{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--acc);text-transform:uppercase}
+.prog-num{font-size:12px;color:var(--muted)}
+.prog-track{height:3px;background:var(--s2);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--cF),var(--gold),var(--acc));transition:width .5s ease}
+#screen-quiz .card{padding:32px 32px 24px}
+.q-num{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.q-text{font-size:clamp(16px,2.8vw,20px);font-weight:700;line-height:1.5;margin-bottom:24px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;cursor:pointer;transition:var(--ease);display:flex;gap:12px;align-items:flex-start;text-align:left}
+.opt:hover{border-color:rgba(196,160,64,.35)}
+.opt.picked{border-color:var(--acc);background:rgba(196,160,64,.07)}
+.opt-ltr{width:26px;min-width:26px;height:26px;border-radius:7px;background:var(--s1);border:1.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--muted);flex-shrink:0;margin-top:1px;transition:var(--ease)}
+.opt.picked .opt-ltr{background:var(--acc);border-color:var(--acc);color:#0A0A0F}
+.opt-txt{font-size:14px;line-height:1.6;color:var(--muted);transition:var(--ease)}
+.opt.picked .opt-txt{color:var(--text)}
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:20px}
+.btn-next{background:var(--s2);border:1.5px solid var(--border);border-radius:100px;padding:12px 32px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:var(--ease)}
+.btn-next:not(:disabled):hover{border-color:var(--gold);color:var(--text)}
+.btn-next:disabled{opacity:.35;cursor:not-allowed}
+.btn-next.ready{border-color:var(--gold);color:var(--gold)}
+
+/* ── CSS：計算頁 ── */
+#screen-calc{text-align:center}
+#screen-calc .card{padding:64px 44px}
+.calc-icon{font-size:48px;margin-bottom:24px;animation:pulse 1.4s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.08);opacity:1}}
+.calc-title{font-size:22px;font-weight:900;margin-bottom:12px}
+.calc-sub{font-size:14px;color:var(--muted);min-height:24px;transition:opacity .3s}
+.calc-bar-wrap{margin:32px 0 0;height:3px;background:var(--s2);border-radius:100px;overflow:hidden}
+.calc-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--cF),var(--gold),var(--acc));width:0;transition:width .6s ease}
+
+/* ── CSS：問卷解鎖頁 ── */
+.survey-hero{border-radius:var(--r);padding:40px 36px 32px;text-align:center;position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--border)}
+.survey-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,var(--type-color-a,#C4A040) 0%,transparent 70%);opacity:.12;pointer-events:none}
+.survey-hero-badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;border:1px solid var(--type-color-b,#D8B850);color:var(--type-color-b,#D8B850);background:rgba(255,255,255,.04)}
+.survey-hero-emoji{font-size:48px;margin-bottom:10px;display:block}
+.survey-hero-en{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.survey-hero-zh{font-size:clamp(26px,4.5vw,38px);font-weight:900;line-height:1.15;background:linear-gradient(135deg,#fff 0%,var(--type-color-b,#D8B850) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.survey-hero-motto{font-size:13.5px;font-style:italic;color:var(--muted);max-width:380px;margin:0 auto}
+.survey-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:32px 36px;margin-top:8px}
+.survey-eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:8px}
+.survey-title{font-size:20px;font-weight:900;margin-bottom:8px}
+.survey-sub{font-size:13px;color:var(--muted);line-height:1.75;padding:12px 16px;background:rgba(196,160,64,.06);border:1px solid rgba(196,160,64,.18);border-radius:10px;margin-bottom:24px}
+.survey-q{margin-bottom:20px}
+.survey-q-text{font-size:14px;font-weight:700;margin-bottom:10px}
+.survey-opts{display:flex;flex-direction:column;gap:6px}
+.s-opt{background:var(--s2);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:13.5px;color:var(--muted);transition:var(--ease);display:flex;gap:10px;align-items:center}
+.s-opt:hover{border-color:rgba(196,169,106,.3)}
+.s-opt.picked{border-color:var(--gold);color:var(--text);background:rgba(196,169,106,.07)}
+.s-dot{width:16px;min-width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;transition:var(--ease)}
+.s-opt.picked .s-dot{background:var(--gold);border-color:var(--gold)}
+.survey-result-box{background:rgba(196,169,106,.07);border:1px solid rgba(196,169,106,.22);border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.75;color:var(--text);margin:0 0 20px;display:none}
+.survey-result-cta{margin-top:8px;font-weight:700;color:var(--gold)}
+.btn-unlock{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-l) 100%);color:#0A0A0F;border:none;border-radius:100px;padding:16px 48px;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;width:100%;transition:var(--ease)}
+.btn-unlock:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(196,169,106,.28)}
+.btn-unlock:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* ── CSS：結果頁 ── */
+#screen-result{padding-bottom:0}
+.result-hero{border-radius:var(--r);padding:44px 36px 36px;text-align:center;position:relative;overflow:hidden;background:var(--s1);border:1px solid var(--border)}
+.result-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,var(--type-color-a) 0%,transparent 70%);opacity:.14;pointer-events:none}
+.result-badge{display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;border:1px solid var(--type-color-b);color:var(--type-color-b);background:rgba(255,255,255,.04)}
+.result-emoji{font-size:52px;margin-bottom:12px;display:block}
+.result-type-en{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.result-type-zh{font-size:clamp(28px,5vw,42px);font-weight:900;line-height:1.15;background:linear-gradient(135deg,#fff 0%,var(--type-color-b) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.result-motto{font-size:14px;font-style:italic;color:var(--muted);max-width:380px;margin:0 auto}
+
+/* ── CSS：特徵指示器 ── */
+.trait-card{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-top:8px;display:flex;gap:12px;align-items:flex-start}
+.trait-icon-box{width:38px;min-width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:2px}
+.trait-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+.trait-text strong{color:var(--type-color-b)}
+
+/* ── CSS：分析卡片區 ── */
+.result-body{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:8px}
+.insight-card{background:var(--s2);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:12px}
+.insight-label{font-size:17px;font-weight:900;color:var(--text);letter-spacing:.01em;margin-bottom:12px}
+.insight-text{font-size:15px;line-height:1.85;color:var(--muted)}
+.mori-box{background:rgba(196,169,106,.05);border:1px solid rgba(196,169,106,.18);border-radius:14px;padding:22px 24px;margin-top:0}
+.mori-lbl{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:.01em;margin-bottom:12px}
+.mori-quote{font-size:15px;line-height:1.85;color:var(--muted);font-style:italic}
+
+/* ── CSS：Email 收集區 ── */
+.email-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:8px}
+.email-title{font-size:18px;font-weight:900;margin-bottom:6px}
+.email-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.email-row{display:flex;gap:10px;margin-bottom:8px}
+.email-inp{flex:1;background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-size:15px;outline:none;font-family:inherit;transition:var(--ease)}
+.email-inp:focus{border-color:rgba(196,169,106,.45)}
+.btn-email{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#0A0A0F;border:none;border-radius:12px;padding:13px 24px;font-size:15px;font-weight:900;cursor:pointer;font-family:inherit;white-space:nowrap;transition:var(--ease)}
+.btn-email:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(196,169,106,.28)}
+.btn-skip-email{background:none;border:none;color:var(--muted);font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:4px 0;display:block;text-align:center;width:100%;transition:var(--ease)}
+.btn-skip-email:hover{color:var(--text)}
+.email-note{font-size:12px;color:var(--muted);margin-top:12px;opacity:.65;text-align:center}
+.email-done{font-size:14px;color:var(--acc);font-weight:700;margin-top:12px;display:none;text-align:center}
+
+/* ── CSS：底部按鈕 ── */
+.actions-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:24px 32px;margin-top:8px}
+.btn-row{display:flex;flex-direction:column;gap:10px}
+.btn-line{display:flex;align-items:center;justify-content:center;gap:10px;background:#06C755;color:#fff;border:none;border-radius:100px;padding:17px 38px;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;transition:var(--ease);width:100%}
+.btn-line:hover{box-shadow:0 8px 26px rgba(6,199,85,.3);transform:translateY(-2px)}
+.btn-sec-row{display:flex;gap:10px}
+.btn-ghost-sec{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px solid var(--border);border-radius:100px;padding:13px 10px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:var(--ease)}
+.btn-ghost-sec:hover{border-color:rgba(255,255,255,.22);color:var(--text)}
+.btn-retake{display:block;margin:8px auto 0;background:transparent;border:none;color:var(--muted);font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.btn-retake:hover{color:var(--text)}
+
+/* ── CSS：財富矩陣互引區 ── */
+.matrix-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:24px 32px;margin-top:8px}
+.matrix-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.matrix-title{font-size:17px;font-weight:900;margin-bottom:6px}
+.matrix-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.matrix-link{display:flex;align-items:center;gap:10px;background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;text-decoration:none;color:var(--text);font-size:14px;font-weight:700;transition:var(--ease)}
+.matrix-link:hover{border-color:rgba(196,169,106,.4);color:var(--gold)}
+.matrix-link-icon{font-size:20px}
+
+@media(max-width:480px){
+  #screen-welcome .card{padding:28px 20px}
+  .survey-hero,.survey-card,.result-hero,.trait-card,.result-body,.email-wrap,.actions-wrap,.matrix-wrap{padding-left:20px;padding-right:20px}
+  #screen-quiz .card{padding:24px 20px 20px}
+  .email-row{flex-direction:column}
+  .btn-email{width:100%}
+  .btn-sec-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Cursor ── -->
+<div id="cursor-fx" aria-hidden="true">
+  <div class="cur-ring" id="cur-ring"></div>
+  <div class="cur-dot" id="cur-dot"></div>
+</div>
+<div id="cursor-spotlight"></div>
+<!-- ── Floating Orbs ── -->
+<div id="mori-blobs" aria-hidden="true">
+  <div class="mblob mblob--a"></div>
+  <div class="mblob mblob--b"></div>
+  <div class="mblob mblob--c"></div>
+</div>
+<!-- ── Particles ── -->
+<div id="particles-js"></div>
+
+<!-- 分享圖卡（隱藏，html2canvas 用） -->
+<div id="share-card-wrap" style="position:fixed;top:-9999px;left:-9999px;pointer-events:none;z-index:-1">
+  <div id="share-card" style="width:600px;height:600px;background:#0A0A0F;font-family:'Noto Sans TC',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 48px;box-sizing:border-box;position:relative;overflow:hidden">
+    <div id="sc-glow" style="position:absolute;inset:0;pointer-events:none"></div>
+    <div id="sc-accent" style="position:absolute;top:0;left:0;right:0;height:3px"></div>
+    <span id="sc-emoji" style="font-size:80px;display:block;margin-bottom:18px;position:relative"></span>
+    <div id="sc-type-en" style="font-size:13px;font-weight:700;color:#9090A8;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;position:relative"></div>
+    <div id="sc-type-zh" style="font-size:54px;font-weight:900;color:#FFFFFF;margin-bottom:14px;position:relative;line-height:1.2"></div>
+    <div id="sc-motto" style="font-size:17px;color:#9090A8;line-height:1.7;max-width:400px;font-style:italic;margin-bottom:36px;position:relative"></div>
+    <div style="width:60px;height:1px;background:rgba(255,255,255,.15);margin-bottom:24px;position:relative"></div>
+    <div style="font-size:14px;color:#C4A96A;margin-bottom:6px;position:relative">你的金錢人格是哪一種？</div>
+    <div id="sc-url" style="font-size:13px;color:#9090A8;position:relative">mori1024studio.github.io</div>
+    <div style="position:absolute;bottom:24px;right:28px;font-size:13px;font-weight:700;color:#C4A96A;opacity:.7">by Mori</div>
+  </div>
+</div>
+
+<!-- PDF 輸出目標（隱藏，html2canvas 用，全 inline style 避免 CSS 變數渲染問題） -->
+<div id="pdf-target" style="position:fixed;top:-9999px;left:-9999px;display:none;pointer-events:none;z-index:-1;width:680px"></div>
+
+<!-- ══ 歡迎頁 ══ -->
+<div id="screen-welcome" class="screen active">
+  <div class="card">
+    <div class="badge-pill">致富心態 × Mori 測驗</div>
+    <h1 class="hero-h1">你的致富心態，<br/>是哪一種金錢人格？</h1>
+    <p class="hero-sub">不是測你有多少錢。<br/>《致富心態》說：決定你財富終點的，是你和金錢之間最深層的心理關係。<br/>10題情境測驗，揭示你的金錢行為背後的真實驅動。</p>
+    <div class="stats-row">
+      <span class="stat-chip"><strong>10</strong> 題情境測驗</span>
+      <span class="stat-chip"><strong>6</strong> 種金錢人格</span>
+      <span class="stat-chip">約 <strong>3</strong> 分鐘完成</span>
+    </div>
+    <div class="sym-head">
+      <div class="sym-lbl">你對金錢最有感的狀況是？</div>
+      <div class="sym-hint">選出你認識的感受（可複選，至少選一個）</div>
+    </div>
+    <div class="sym-grid" id="symGrid">
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">A</div><div class="sym-txt">認真存錢，但永遠覺得「不夠安全」</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">B</div><div class="sym-txt">薪水花完才想到要存，不知道錢去哪了</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">C</div><div class="sym-txt">很在意自己的資產有沒有「跟上」周圍的人</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">D</div><div class="sym-txt">有計畫，但還沒把存的錢真正「用起來」</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">E</div><div class="sym-txt">已經在投資，想更了解自己的財務盲點</div></div>
+      <div class="sym-item" onclick="pickSym(this)"><div class="sym-ltr">F</div><div class="sym-txt">覺得「財富自由」和自己距離很遠</div></div>
+    </div>
+    <div class="sym-count" id="symCount">請至少選一個，開始精準診斷</div>
+    <button class="btn-gold" id="startBtn" onclick="startQuiz()" disabled>找出我的金錢人格 →</button>
+  </div>
+</div>
+
+<!-- ══ 測驗頁 ══ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-prog-wrap">
+    <div class="quiz-prog-meta">
+      <span class="prog-dim">金錢人格診斷</span>
+      <span class="prog-num" id="progNum">1 / 10</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:10%"></div></div>
+  </div>
+  <div class="card">
+    <div class="q-num" id="qNum">Q1</div>
+    <div class="q-text" id="qText"></div>
+    <div class="opts" id="optList"></div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="nextBtn" onclick="nextQ()" disabled>下一題 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 計算頁 ══ -->
+<div id="screen-calc" class="screen">
+  <div class="card">
+    <div class="calc-icon">💰</div>
+    <div class="calc-title">正在分析你的金錢心理模式</div>
+    <div class="calc-sub" id="calcSub">比對《致富心態》六種人格框架...</div>
+    <div class="calc-bar-wrap"><div class="calc-bar" id="calcBar"></div></div>
+  </div>
+</div>
+
+<!-- ══ 問卷解鎖頁 ══ -->
+<div id="screen-survey" class="screen">
+  <div class="survey-hero" id="surveyHero">
+    <div class="survey-hero-badge">你的金錢人格類型</div>
+    <span class="survey-hero-emoji" id="surveyEmoji"></span>
+    <div class="survey-hero-en" id="surveyTypeEn"></div>
+    <div class="survey-hero-zh" id="surveyTypeZh"></div>
+    <div class="survey-hero-motto" id="surveyMotto"></div>
+  </div>
+  <div class="survey-card">
+    <div class="survey-eyebrow">解鎖完整分析</div>
+    <div class="survey-title">再回答 3 個問題</div>
+    <div class="survey-sub">這不會改變你的類型結果，但可以更精準地了解你目前需要面對的核心財務挑戰，並解鎖個人化的分析與建議。</div>
+    <div class="survey-q">
+      <div class="survey-q-text">Q1｜你現在最想改善的財務狀況是？</div>
+      <div class="survey-opts" id="sq1">
+        <div class="s-opt" onclick="pickSurvey('q1','A',this)"><div class="s-dot"></div>找到可以開始的副業，增加主動收入</div>
+        <div class="s-opt" onclick="pickSurvey('q1','B',this)"><div class="s-dot"></div>先把花費管好，每個月穩定存下一筆</div>
+        <div class="s-opt" onclick="pickSurvey('q1','C',this)"><div class="s-dot"></div>了解自己為什麼一直存不了錢</div>
+        <div class="s-opt" onclick="pickSurvey('q1','D',this)"><div class="s-dot"></div>暫時還沒有特別想改變</div>
+      </div>
+    </div>
+    <div class="survey-q">
+      <div class="survey-q-text">Q2｜如果有人能幫你，你最需要的支援是？</div>
+      <div class="survey-opts" id="sq2">
+        <div class="s-opt" onclick="pickSurvey('q2','A',this)"><div class="s-dot"></div>一套清楚的系統，照著走就好</div>
+        <div class="s-opt" onclick="pickSurvey('q2','B',this)"><div class="s-dot"></div>有人一起討論方向、互相督促</div>
+        <div class="s-opt" onclick="pickSurvey('q2','C',this)"><div class="s-dot"></div>先搞清楚自己的盲點在哪</div>
+        <div class="s-opt" onclick="pickSurvey('q2','D',this)"><div class="s-dot"></div>先自己研究看看</div>
+      </div>
+    </div>
+    <div class="survey-q" style="margin-bottom:20px">
+      <div class="survey-q-text">Q3｜你目前對「建立副業收入」的狀態是？</div>
+      <div class="survey-opts" id="sq3">
+        <div class="s-opt" onclick="pickSurvey('q3','A',this)"><div class="s-dot"></div>已經在做，想讓整體財務系統更完整</div>
+        <div class="s-opt" onclick="pickSurvey('q3','B',this)"><div class="s-dot"></div>有認真考慮，需要一個明確起點</div>
+        <div class="s-opt" onclick="pickSurvey('q3','C',this)"><div class="s-dot"></div>還在觀望，不確定適不適合自己</div>
+        <div class="s-opt" onclick="pickSurvey('q3','D',this)"><div class="s-dot"></div>目前沒有這個計畫</div>
+      </div>
+    </div>
+    <div class="survey-result-box" id="surveyResultBox"></div>
+    <button class="btn-unlock" id="unlockBtn" onclick="unlockResult()" disabled>查看完整分析 →</button>
+  </div>
+</div>
+
+<!-- ══ 結果頁 ══ -->
+<div id="screen-result" class="screen">
+
+  <div class="result-hero" id="resultHero">
+    <div class="result-badge">金錢人格類型</div>
+    <span class="result-emoji" id="resultEmoji"></span>
+    <div class="result-type-en" id="resultTypeEn"></div>
+    <div class="result-type-zh" id="resultTypeZh"></div>
+    <div class="result-motto" id="resultMotto"></div>
+  </div>
+
+  <!-- 核心特徵指示器 -->
+  <div class="trait-card" id="traitCard">
+    <div class="trait-icon-box" id="traitIcon"></div>
+    <div class="trait-text" id="traitText"></div>
+  </div>
+
+  <div class="gap"></div>
+
+  <!-- 分析區 -->
+  <div class="result-body">
+    <div class="insight-card">
+      <div class="insight-label">你的金錢模式</div>
+      <div class="insight-text" id="insightPattern"></div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-label">這背後的心理根源</div>
+      <div class="insight-text" id="insightRoot"></div>
+    </div>
+    <div class="insight-card" style="margin-bottom:0">
+      <div class="insight-label">《致富心態》給你的行動處方</div>
+      <div class="insight-text" id="insightFix"></div>
+    </div>
+  </div>
+
+  <div class="gap"></div>
+
+  <div class="result-body" style="padding:24px 32px">
+    <div class="mori-box">
+      <div class="mori-lbl">Mori 觀點</div>
+      <div class="mori-quote" id="moriQuote"></div>
+    </div>
+  </div>
+
+  <div class="gap"></div>
+
+  <!-- 財富矩陣互引 -->
+  <div class="matrix-wrap" id="matrixSection">
+    <div class="matrix-label">財富漏斗 · 下一步</div>
+    <div class="matrix-title" id="matrixTitle"></div>
+    <div class="matrix-sub" id="matrixSub"></div>
+    <a class="matrix-link" id="matrixLink" href="#" target="_blank">
+      <span class="matrix-link-icon" id="matrixIcon"></span>
+      <span id="matrixLinkText"></span>
+    </a>
+  </div>
+
+  <div class="gap"></div>
+
+  <!-- Email 收集 -->
+  <div class="email-wrap">
+    <div class="email-title">領取你的金錢人格完整報告</div>
+    <div class="email-sub">輸入 Email，Mori 把針對你這個類型的深度解析和行動清單整理給你。</div>
+    <div class="email-row">
+      <input class="email-inp" type="email" id="emailInp" placeholder="你的 Email"/>
+      <button class="btn-email" onclick="submitEmail()">發送給我</button>
+    </div>
+    <button class="btn-skip-email" onclick="skipEmail()">跳過，直接下載 PDF</button>
+    <div class="email-note">不發廣告，只發一封你的人格報告。隨時可取消訂閱。</div>
+    <div class="email-done" id="emailDone">✓ 已送出！報告會在幾分鐘內寄到你的信箱。</div>
+  </div>
+
+  <div class="gap"></div>
+
+  <!-- 底部按鈕 -->
+  <div class="actions-wrap">
+    <div class="btn-row">
+      <button class="btn-line" onclick="openLine()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.27 2 11.5c0 3.688 2.167 6.91 5.407 8.734L6.5 22l3.077-1.602A11.15 11.15 0 0012 20.5c5.523 0 10-4.27 10-9S17.523 2 12 2zm-3.5 11.5h-1a.5.5 0 010-1h.5V10h-.5a.5.5 0 010-1h1a.5.5 0 01.5.5v3.5a.5.5 0 01-.5.5zm2.5.5a.5.5 0 01-.5-.5v-4a.5.5 0 011 0v2.794l2-2.587A.5.5 0 0114 9v4a.5.5 0 01-1 0v-2.794l-2 2.587A.5.5 0 0111 13.5zm5.5 0h-2a.5.5 0 01-.5-.5V9.5a.5.5 0 011 0V13h1v-1.5a.5.5 0 011 0V13h.5a.5.5 0 010 1H16zm0-5h-2a.5.5 0 010-1h2a.5.5 0 010 1z"/></svg>
+        追蹤 LINE@
+      </button>
+      <div class="btn-sec-row">
+        <button class="btn-ghost-sec" onclick="openIG()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          追蹤 IG
+        </button>
+        <button class="btn-ghost-sec" onclick="downloadPDF()" id="dlBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          下載 PDF
+        </button>
+      </div>
+      <div class="btn-sec-row">
+        <button class="btn-ghost-sec" id="shareBtn" onclick="shareResult()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          分享結果
+        </button>
+        <button class="btn-ghost-sec" onclick="copyResult()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          複製文字
+        </button>
+      </div>
+      <button class="btn-retake" onclick="retake()">重新測驗</button>
+    </div>
+  </div>
+
+</div><!-- /screen-result -->
+
+<script>
+/* ── JS：1. 全域設定 ── */
+const CFG = {
+  lineUrl: 'https://line.me/R/ti/p/@507wvwbz',
+  igUrl: 'https://instagram.com/mori1024_',
+  /* 本機預覽無效，需真實環境才能運作 */
+  mlKey: '',
+  mlGroup: { F:'', V:'', C:'', S:'', M:'', K:'' },
+};
+
+/* ── JS：2. 全域狀態 ── */
+let currentQ = 0, picked = null, answers = [], finalType = '';
+let surveyAnswers = {q1:'',q2:'',q3:''};
+let symPicked = new Set();
+
+/* ── JS：3. 題庫資料 ── */
+const QS = [
+  { text:'你剛收到一筆意外之財（相當於半個月薪），你的第一反應是？', opts:[
+    {t:'F', txt:'先存起來，不確定什麼時候會用到，有備無患'},
+    {t:'V', txt:'犒賞自己，買一直想要的東西，這種機會不常有'},
+    {t:'C', txt:'想到一個能提升生活質感的品牌或體驗'},
+    {t:'S', txt:'規劃好比例：一部分存、一部分投資、一部分花'},
+    {t:'M', txt:'直接轉進投資帳戶，讓它繼續複利滾動'},
+  ]},
+  { text:'朋友說他最近開始投資了，報酬還不錯。你的第一反應？', opts:[
+    {t:'K', txt:'心裡羨慕，但覺得自己根本沒有閒錢可以投'},
+    {t:'F', txt:'好奇，但擔心風險，怕跟進之後套牢'},
+    {t:'V', txt:'問他能不能帶你一起，馬上想試試'},
+    {t:'S', txt:'問清楚什麼標的、風險水位，再評估是否適合自己'},
+    {t:'M', txt:'問他是指數型基金還是個股，細節比結果更重要'},
+  ]},
+  { text:'你帳戶裡的餘額，你多久查一次？', opts:[
+    {t:'M', txt:'每個月固定追蹤一次資產總額和成長率'},
+    {t:'S', txt:'每個月底檢視一次，看有沒有符合計畫'},
+    {t:'F', txt:'不太敢看，看了反而更焦慮'},
+    {t:'K', txt:'常常看，因為總是比想像中少'},
+    {t:'V', txt:'消費完才看一下還剩多少'},
+  ]},
+  { text:'遇到限時特賣，你最可能的反應是？', opts:[
+    {t:'C', txt:'看品牌和質感，有「面子」的才認真考慮'},
+    {t:'V', txt:'「這麼划算不買可惜」，很容易直接下手'},
+    {t:'F', txt:'猶豫，怕買了後悔，也怕不買錯過'},
+    {t:'S', txt:'先確認是否真的需要，才決定要不要買'},
+    {t:'M', txt:'算一下這筆錢拿去投資的機會成本'},
+  ]},
+  { text:'你對「財富自由」的想像，最接近哪一個？', opts:[
+    {t:'V', txt:'想要什麼就能買什麼，不需要看價格'},
+    {t:'C', txt:'能住好地段、有好車，讓周圍的人看見你的成功'},
+    {t:'F', txt:'不需要再擔心任何緊急狀況，有穩固的安全感'},
+    {t:'S', txt:'有足夠的現金流，讓生活有更多選擇'},
+    {t:'M', txt:'資產的被動收入超過生活支出，不再需要賣時間'},
+  ]},
+  { text:'「月底快沒錢了」這種感覺，你有多熟悉？', opts:[
+    {t:'K', txt:'幾乎每個月都這樣，好像一直擺脫不了'},
+    {t:'F', txt:'就算帳戶有錢，還是會擔心「夠不夠」'},
+    {t:'V', txt:'很熟悉，但覺得花得值得就好'},
+    {t:'C', txt:'偶爾，通常是買了什麼之後才發現超支'},
+    {t:'S', txt:'幾乎不會，我有固定的預算規劃'},
+  ]},
+  { text:'如果你要開始存錢，你最可能用什麼方式？', opts:[
+    {t:'F', txt:'鎖進定存，這樣才不會亂花'},
+    {t:'V', txt:'花剩的才存，但通常剩不多'},
+    {t:'K', txt:'想存但常常存不下來，不知道錢去哪了'},
+    {t:'S', txt:'先付自己，固定比例自動扣款再花剩下的'},
+    {t:'M', txt:'設好自動化投資指令，剩下的再消費'},
+  ]},
+  { text:'有人說「現在投入的每100元，30年後可能變成800元」，你的感受？', opts:[
+    {t:'M', txt:'對，複利的力量就是這樣，重點是要盡早開始'},
+    {t:'S', txt:'有道理，我有在執行類似的計畫'},
+    {t:'F', txt:'邏輯上懂，但30年太長，中間怕出什麼狀況'},
+    {t:'V', txt:'30年太遠了，現在的享受比較真實'},
+    {t:'K', txt:'感覺很遙遠，因為現在根本存不下來'},
+  ]},
+  { text:'你最近一次後悔的消費，你的感受是？', opts:[
+    {t:'C', txt:'後悔買的方式，但不後悔那個「想要」的心態'},
+    {t:'V', txt:'沒什麼，下次注意就好，生活就是這樣'},
+    {t:'S', txt:'仔細回想哪個環節出問題，想辦法下次避免'},
+    {t:'F', txt:'很自責，覺得自己不應該亂花'},
+    {t:'K', txt:'非常後悔，覺得自己連這點錢都守不住'},
+  ]},
+  { text:'你對「金錢」最深層的感受，最接近哪一個？', opts:[
+    {t:'F', txt:'錢讓我焦慮，但沒錢更讓我焦慮'},
+    {t:'V', txt:'錢就是用來讓生活更好的'},
+    {t:'C', txt:'錢是一種讓別人看見你價值的語言'},
+    {t:'S', txt:'錢是讓你有更多選擇的基礎工具'},
+    {t:'M', txt:'錢是可以自我複製的資源，管理它就是在管理自由'},
+    {t:'K', txt:'錢對我來說，一直都是焦慮和壓力的來源'},
+  ]},
+];
+
+/* ── JS：4. 類型資料 ── */
+const TYPES = {
+  F:{emoji:'🛡️',en:'The Fear Protector',zh:'恐懼型',motto:'你不是在管理金錢，你是在被恐懼管理',
+    color:'#5888C4',colorB:'#70A0DC',
+    trait:{icon:'⚠️',bg:'rgba(88,136,196,.15)',text:'你的核心是<strong>安全感驅動</strong>——所有財務決策都被「萬一怎麼辦」主導。這讓你謹慎，卻也讓錢永遠在「被保護」而不是「在工作」。'},
+    pattern:'你存錢、你謹慎、你不亂花——但這些行為的動力來源不是自由，是恐懼。「萬一失業怎麼辦？萬一生病怎麼辦？萬一不夠用怎麼辦？」就算帳戶裡有錢，那種「不夠」的感覺從來不會消失。你的謹慎是防禦，不是策略。',
+    root:'《致富心態》說：金錢行為的背後，幾乎都是情緒，不是邏輯。恐懼型的問題不是資訊的缺乏，是決策長期被「避免損失」而非「創造增長」所驅動。這讓你天生保守，機會成本極高——你以為你在守錢，但你真正錯過的是讓錢替你工作的時間。',
+    fix:'給「安全感帳戶」設一個具體的門檻：6個月生活費。一旦達到這個數字，多出的部分有義務用來增長，不能繼續只待在存款帳戶。允許自己在有安全網的前提下冒一點風險——那才是真正的謹慎，不是把所有錢都鎖起來。',
+    mori:'恐懼帶來的保守，是一種隱性的財務損失。你以為你在保護自己，但你真正失去的，是讓錢幫你工作的時間。安全感的對立面不是風險，是自由。',
+    matrix:{title:'配對測驗：你目前在財富哪一層？',sub:'恐懼型通常卡在L1-L3之間。做完財富階梯測驗，找出你的精確位置，再對應適合你的下一步。',link:'https://mori1024studio.github.io/wealth-ladder/',icon:'🪜',linkText:'→ 前往財富階梯測驗'}
+  },
+  V:{emoji:'⚡',en:'The Present Spender',zh:'短視型',motto:'你的快樂是真的，你的代價也是',
+    color:'#C47058',colorB:'#D88060',
+    trait:{icon:'🎯',bg:'rgba(196,112,88,.15)',text:'你的模式是<strong>即時享樂優先</strong>——大腦的獎勵迴路在消費當下就完整運作，但三十年後的代價太遠，感覺不真實。'},
+    pattern:'享受當下沒有錯——問題是你沒有在享受，你只是在逃避規劃。每次消費都帶來即時的滿足感，但這種滿足感在一週內消退，而那筆支出的代價要三十年後才算清楚。你把「今天的快樂」和「明天的自由」視為對立選項，但它們其實可以共存。',
+    root:'人類大腦天生偏好即時獎勵，這是演化的設計。但《致富心態》指出，財富的建立需要一個刻意的機制對抗這個本能。短視型最大的風險不是單次的揮霍，是長期的複利損失——不是你花了多少，而是那些錢原本可以變成多少。',
+    fix:'設計「先付自己再花剩下的」系統：每次薪水入帳，自動轉一個固定金額到你碰不到的帳戶，然後把剩下的全部花光也沒關係。同時，對超過一定金額的消費設置48小時冷靜期。系統比意志力可靠。',
+    mori:'消費不是罪，無計畫的消費才是。享受和規劃不是對立的——你完全可以花錢享受生活，同時讓另一部分的錢在複利中工作。只是你得先把順序弄對：先存，再花。',
+    matrix:{title:'配對測驗：你的習慣為什麼一直斷掉？',sub:'短視型的消費行為，根源常常在習慣系統的設計問題。做原子習慣測驗，找出你的行為斷點。',link:'https://mori1024studio.github.io/atomic-habits-quiz/',icon:'🔗',linkText:'→ 前往原子習慣斷點測驗'}
+  },
+  C:{emoji:'🏆',en:'The Status Seeker',zh:'攀比型',motto:'你在用別人的尺，量自己的財富',
+    color:'#8A5EC4',colorB:'#A070DC',
+    trait:{icon:'🪞',bg:'rgba(138,94,196,.15)',text:'你的財富感受<strong>高度相對化</strong>——不是存了多少讓你快樂，是比別人多了多少讓你快樂。這意味著沒有任何數字能讓你真正滿足。'},
+    pattern:'你對金錢的感受，取決於「別人有什麼」。這意味著你的目標會隨著周圍的人移動——鄰居換新車，你的舊車突然變得難看；同事升職，你的薪水突然變得不夠。沒有任何財富數字能讓你真正滿足，因為總有人比你更多。',
+    root:'《致富心態》最犀利的一句話：「世界上最難的財務技能，是讓目標柱不移動。」攀比型把財富當成社會比較的工具，而不是個人自由的基礎。這導致消費永遠跟著社會壓力走，而不是跟著自己的人生目標走。',
+    fix:'定義你自己的「夠」——不是「比鄰居多」，而是「我的生活要包含什麼」。具體寫下你的理想生活清單，算出它實際需要多少錢。你會發現那個數字通常比你想的小得多，因為你真正想要的不是更多，是足夠清楚的方向。',
+    mori:'用別人的標準定義自己的財富，你永遠是在追一個移動的目標。真正的財務自由始於你能定義「夠」這個字，而不是等別人先停下來。',
+    matrix:{title:'配對測驗：你的暗黑心智是哪一種？',sub:'攀比型背後常有評價式或壓力式的心理驅動。做暗黑心智測驗，看看你的深層動機。',link:'https://mori1024studio.github.io/mindfuck-quiz/',icon:'🧠',linkText:'→ 前往暗黑心智測驗'}
+  },
+  S:{emoji:'⚖️',en:'The Balanced Planner',zh:'穩健型',motto:'你知道怎麼用錢，但你可以讓它走得更遠',
+    color:'#58A898',colorB:'#70C0B0',
+    trait:{icon:'📋',bg:'rgba(88,168,152,.15)',text:'你有<strong>計畫、有紀律、有系統</strong>——這是大多數人一輩子都學不會的財務基礎。你的下一步是把「守成」的心態升級為「主動增長」。'},
+    pattern:'你有預算、有計畫、有儲蓄習慣——你在財務管理上已經比大多數人走得更遠。你的問題不是基礎，而是你可能還停留在「守成」的框架，還沒讓財富真正進入主動增長的軌道。你建了土地，但還沒種下作物。',
+    root:'《致富心態》說：儲蓄是財務基礎，但不是終點。穩健型的盲點是把「不花錢」等同於「在積累財富」——但存款帳戶的利率長期跑輸通膨，意味著不投資就是在緩慢失去購買力。',
+    fix:'你已有最難的部分：紀律和系統。現在的下一步是把存下來的錢「分配工作」——設定一個自動化的資產配置比例，讓不同比例的錢在不同地方各司其職。你有土地，現在需要種下作物。',
+    mori:'穩健是優勢，不是終點。你的紀律是別人花十年才能建立的能力。現在用同樣的紀律，把眼光從「保護現有的」擴展到「讓它持續長大」，你的財務圖景會完全不同。',
+    matrix:{title:'配對測驗：你真正在財富哪一層？',sub:'穩健型通常在L3-L4之間準備突破。做財富階梯測驗，找到你的精確位置和下一個升層的策略。',link:'https://mori1024studio.github.io/wealth-ladder/',icon:'🪜',linkText:'→ 前往財富階梯測驗'}
+  },
+  M:{emoji:'📈',en:'The Compound Thinker',zh:'複利型',motto:'你讓時間替你工作',
+    color:'#C4A040',colorB:'#D8B850',
+    trait:{icon:'⏳',bg:'rgba(196,160,64,.15)',text:'你理解<strong>複利的核心邏輯</strong>：時間 × 持續 = 指數增長。你的財富行為不是由情緒驅動，而是由長期系統驅動。你可能的盲點是過度優化，忽略了當下和風險緩衝。'},
+    pattern:'你理解複利的本質，你讓錢在你睡覺的時候也在工作。你對財富的定義是「資產的自動增長」而不是「當月薪資」——這是少數人才有的思維框架。你最需要確認的不是策略，而是系統夠不夠穩健。',
+    root:'《致富心態》提醒：複利需要的最關鍵元素是時間，而時間需要你「活著並持續待在市場裡」。過於激進的投資策略或忽略緊急備用金，反而可能在一次非預期事件中讓整個計畫中斷。長期生存比短期最優化更重要。',
+    fix:'確認你的財務系統包含三個層：緊急備用金（6個月）、保險覆蓋（收入、健康），然後才是增長投資。同時，允許自己有一個「享樂帳戶」——因為一個讓你完全沒有當下的策略，本身也是一種風險。',
+    mori:'你已經在少數人才懂的軌道上。現在只需確認一件事：系統夠不夠穩健，能讓你在遇到任何非預期事件時，依然能繼續待在複利的軌道上。不中斷，就是最強的策略。',
+    matrix:{title:'配對測驗：你在財富的哪一層？',sub:'複利型通常在L4-L6之間。做財富階梯測驗，確認你的精確財富位置，以及下一個階段的重點。',link:'https://mori1024studio.github.io/wealth-ladder/',icon:'🪜',linkText:'→ 前往財富階梯測驗'}
+  },
+  K:{emoji:'🌀',en:'The Scarcity Mind',zh:'匱乏型',motto:'你的財務問題，比錢本身更深',
+    color:'#7890B0',colorB:'#90A8C8',
+    trait:{icon:'🔭',bg:'rgba(120,144,176,.15)',text:'<strong>稀缺心態</strong>讓你的注意力長期被最緊急的財務壓力佔據——這不只是心情問題，它實際上壓縮了你做長遠規劃的認知頻寬。'},
+    pattern:'不管帳戶裡有多少，你的感覺永遠是「不夠」。這不是數字問題，是框架問題。「隧道視野」讓你的注意力只能看見眼前的洞，很難規劃長遠，也很難做出改善現況的決定——因為「萬一」的焦慮始終佔據最多空間。',
+    root:'《稀缺》和《致富心態》都提到：匱乏感不只是沒有錢的問題，它會改變人的認知功能。當心理頻寬被財務焦慮占滿，就很難做出長遠規劃或理性決策——這是一個自我強化的循環：匱乏感 → 短視決策 → 更多匱乏。',
+    fix:'第一步不是投資，是建立「最小安全感體驗」——哪怕每個月只自動轉500元，也要開始。可見的進展，就算很小，能逐漸改變「我是那種存不了錢的人」這個身份認知。同時，找到一件「不花錢也能讓你感到充裕」的事，重新定義「夠」。',
+    mori:'匱乏型最難的地方是：所有建議聽起來都像「先有錢再說」。但你需要先改變的不是帳戶數字，是你對自己「有沒有能力改變」的信念。哪怕最小的進展，都在重寫那個信念。',
+    matrix:{title:'配對測驗：你的習慣為什麼一直斷掉？',sub:'匱乏型的根源常常和習慣系統的斷裂有關。做原子習慣測驗，找出你卡住的真正位置。',link:'https://mori1024studio.github.io/atomic-habits-quiz/',icon:'🔗',linkText:'→ 前往原子習慣斷點測驗'}
+  },
+};
+
+/* ── JS：5. 歡迎頁 ── */
+function pickSym(el){
+  el.classList.toggle('picked');
+  const ltr = el.querySelector('.sym-ltr').textContent;
+  if(el.classList.contains('picked')) symPicked.add(ltr); else symPicked.delete(ltr);
+  const n = symPicked.size;
+  document.getElementById('symCount').textContent = n>0?`已選 ${n} 個感受`:'請至少選一個，開始精準診斷';
+  document.getElementById('startBtn').disabled = n===0;
+}
+
+/* ── JS：6. 測驗主流程 ── */
+function startQuiz(){ show('screen-quiz'); renderQ(); }
+function renderQ(){
+  const q = QS[currentQ];
+  document.getElementById('qNum').textContent = `Q${currentQ+1}`;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('progNum').textContent = `${currentQ+1} / ${QS.length}`;
+  document.getElementById('progFill').style.width = `${((currentQ+1)/QS.length)*100}%`;
+  const letters='ABCDEF';
+  document.getElementById('optList').innerHTML = q.opts.map((o,i)=>`
+    <div class="opt" onclick="pickOpt(this,'${o.t}')">
+      <div class="opt-ltr">${letters[i]}</div>
+      <div class="opt-txt">${o.txt}</div>
+    </div>`).join('');
+  picked=null;
+  const btn=document.getElementById('nextBtn');
+  btn.disabled=true; btn.classList.remove('ready');
+  btn.textContent = currentQ<QS.length-1?'下一題 →':'查看結果 →';
+}
+function pickOpt(el,type){
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('picked'));
+  el.classList.add('picked'); picked=type;
+  const btn=document.getElementById('nextBtn');
+  btn.disabled=false; btn.classList.add('ready');
+}
+function nextQ(){
+  if(!picked) return;
+  answers.push(picked);
+  if(currentQ<QS.length-1){ currentQ++; renderQ(); } else { doCalc(); }
+}
+
+/* ── JS：7. 計分邏輯 ── */
+function doCalc(){
+  show('screen-calc');
+  const msgs=['比對《致富心態》六種人格框架...','分析你的金錢行為模式...','定位你的財務心理驅動...','生成個人化人格報告...'];
+  let mi=0;
+  const subEl=document.getElementById('calcSub'), barEl=document.getElementById('calcBar');
+  const iv=setInterval(()=>{
+    mi++; if(mi<msgs.length){ subEl.style.opacity=0; setTimeout(()=>{subEl.textContent=msgs[mi];subEl.style.opacity=1;},150); }
+    barEl.style.width=`${Math.min(mi*28,95)}%`;
+  },700);
+  setTimeout(()=>{
+    clearInterval(iv); barEl.style.width='100%';
+    const scores={F:0,V:0,C:0,S:0,M:0,K:0};
+    answers.forEach(t=>{if(scores[t]!==undefined)scores[t]++;});
+    let best=null,bestScore=-1;
+    ['F','V','C','S','M','K'].forEach(k=>{if(scores[k]>bestScore){bestScore=scores[k];best=k;}});
+    finalType=best;
+    setTimeout(()=>showSurvey(),400);
+  },3200);
+}
+
+/* ── JS：8. 問卷解鎖頁 ── */
+function showSurvey(){
+  const t = TYPES[finalType];
+  const hero = document.getElementById('surveyHero');
+  hero.style.setProperty('--type-color-a', t.color);
+  hero.style.setProperty('--type-color-b', t.colorB);
+  document.getElementById('surveyEmoji').textContent = t.emoji;
+  document.getElementById('surveyTypeEn').textContent = t.en;
+  document.getElementById('surveyTypeZh').textContent = t.zh;
+  document.getElementById('surveyMotto').textContent = t.motto;
+  show('screen-survey');
+  trackResponse({quiz:'wealth-mindset', result:t.zh});
+}
+
+function pickSurvey(q, val, el){
+  document.querySelectorAll(`#s${q} .s-opt`).forEach(o=>o.classList.remove('picked'));
+  el.classList.add('picked');
+  surveyAnswers[q]=val;
+  if(surveyAnswers.q1 && surveyAnswers.q2 && surveyAnswers.q3){
+    revealSurveyResult();
+    document.getElementById('unlockBtn').disabled=false;
+  }
+}
+
+function revealSurveyResult(){
+  const {q1,q2,q3}=surveyAnswers;
+  let msg='',cta='';
+  const seg = q1==='A'&&(q2==='A'||q2==='B')&&q3!=='D'?'partner':
+              (q1==='A'||q1==='B')&&q3==='A'?'client':
+              q1==='D'||q3==='D'?'cold':'warm';
+  if(seg==='partner'){ msg='你已經在行動了，而且有明確的方向感。你需要的不是更多資訊，是一個能讓你加速的系統。'; cta='加入 LINE@，我們聊聊怎麼開始 →'; }
+  else if(seg==='client'){ msg='你有改變的意願，也知道方向。下一步是把「知道」轉成「做到」——需要的是一個具體的第一步。'; cta='加入 LINE@，我把第一步整理給你 →'; }
+  else if(seg==='warm'){ msg='你還在找適合自己的方式——這完全正常。先把這次的診斷結果存著，等你準備好的時候，這裡有你需要的東西。'; cta='追蹤 IG，每週接收財務洞見 →'; }
+  else { msg='沒有問題，不是每個時刻都適合改變。先記下你的診斷結果，等準備好了再回來。'; cta='追蹤 IG，慢慢建立屬於你的節奏 →'; }
+  const el=document.getElementById('surveyResultBox');
+  el.innerHTML=`<div>${msg}</div><div class="survey-result-cta">${cta}</div>`;
+  el.style.display='block';
+  trackResponse({quiz:'wealth-mindset',result:TYPES[finalType].zh,q1,q2,q3,segment:seg});
+}
+
+function unlockResult(){ showResult(); }
+
+/* ── JS：9. 結果頁渲染 ── */
+function showResult(){
+  const t=TYPES[finalType];
+  const hero=document.getElementById('resultHero');
+  hero.style.setProperty('--type-color-a',t.color);
+  hero.style.setProperty('--type-color-b',t.colorB);
+  document.documentElement.style.setProperty('--type-color-b',t.colorB);
+  document.getElementById('resultEmoji').textContent=t.emoji;
+  document.getElementById('resultTypeEn').textContent=t.en;
+  document.getElementById('resultTypeZh').textContent=t.zh;
+  document.getElementById('resultMotto').textContent=t.motto;
+
+  const traitCard=document.getElementById('traitCard');
+  traitCard.style.background=t.trait.bg;
+  traitCard.style.borderColor=t.color+'44';
+  document.getElementById('traitIcon').textContent=t.trait.icon;
+  document.getElementById('traitText').innerHTML=t.trait.text;
+
+  document.getElementById('insightPattern').textContent=t.pattern;
+  document.getElementById('insightRoot').textContent=t.root;
+  document.getElementById('insightFix').textContent=t.fix;
+  document.getElementById('moriQuote').textContent=t.mori;
+
+  // 財富矩陣互引
+  document.getElementById('matrixTitle').textContent=t.matrix.title;
+  document.getElementById('matrixSub').textContent=t.matrix.sub;
+  document.getElementById('matrixLink').href=t.matrix.link;
+  document.getElementById('matrixIcon').textContent=t.matrix.icon;
+  document.getElementById('matrixLinkText').textContent=t.matrix.linkText;
+
+  show('screen-result');
+}
+
+/* ── JS：10. Email 收集（本機預覽無效，需真實環境才能運作） ── */
+async function submitEmail(){
+  const email=document.getElementById('emailInp').value.trim();
+  if(!email||!email.includes('@')) return;
+  document.getElementById('emailDone').style.display='block';
+  document.getElementById('emailInp').disabled=true;
+  trackResponse({quiz:'wealth-mindset',result:TYPES[finalType].zh,...surveyAnswers,segment:calcSeg(),email});
+  if(CFG.mlKey&&CFG.mlGroup[finalType]){
+    try{
+      await fetch('https://connect.mailerlite.com/api/subscribers',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+CFG.mlKey},
+        body:JSON.stringify({email,groups:[CFG.mlGroup[finalType]]})
+      });
+    }catch(e){}
+  }
+}
+function skipEmail(){ downloadPDF(); }
+function calcSeg(){
+  const {q1,q2,q3}=surveyAnswers;
+  return q1==='A'&&(q2==='A'||q2==='B')&&q3!=='D'?'partner':
+         (q1==='A'||q1==='B')&&q3==='A'?'client':
+         q1==='D'||q3==='D'?'cold':'warm';
+}
+/* 本機預覽無效，需真實環境（Cloudflare Worker） */
+function trackResponse(data){
+  try{fetch('https://quiz-tracker.mori1024.workers.dev/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),keepalive:true}).catch(()=>{})}catch(e){}
+}
+
+/* ── JS：11. 社群 / 分享 / PDF ── */
+function openLine(){ window.open(CFG.lineUrl,'_blank'); }
+function openIG(){ window.open(CFG.igUrl,'_blank'); }
+
+function loadScript(src){
+  return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+}
+
+async function generateShareCanvas(){
+  const t=TYPES[finalType];
+  document.getElementById('sc-emoji').textContent=t.emoji;
+  document.getElementById('sc-type-en').textContent=t.en;
+  document.getElementById('sc-type-zh').textContent=t.zh;
+  document.getElementById('sc-motto').textContent=t.motto;
+  document.getElementById('sc-url').textContent=window.location.href.replace(/^https?:\/\//,'');
+  document.getElementById('sc-glow').style.background=`radial-gradient(circle at 50% 35%,${t.color}28,transparent 60%)`;
+  document.getElementById('sc-accent').style.background=`linear-gradient(90deg,transparent,${t.colorB},transparent)`;
+  if(!window.html2canvas){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+  return await html2canvas(document.getElementById('share-card'),{scale:2,useCORS:true,backgroundColor:'#0A0A0F',logging:false,width:600,height:600});
+}
+
+async function shareResult(){
+  const btn=document.getElementById('shareBtn'), orig=btn.innerHTML;
+  btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 生成中…';
+  btn.disabled=true;
+  try{
+    const canvas=await generateShareCanvas();
+    const dataUrl=canvas.toDataURL('image/png');
+    if(navigator.share&&navigator.canShare){
+      const blob=await (await fetch(dataUrl)).blob();
+      const file=new File([blob],'金錢人格_'+TYPES[finalType].zh+'.png',{type:'image/png'});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'金錢人格測驗',text:'我的金錢人格是「'+TYPES[finalType].zh+'」\n'+TYPES[finalType].motto+'\n\n'+window.location.href});
+        return;
+      }
+    }
+    const link=document.createElement('a');
+    link.download='金錢人格_'+TYPES[finalType].zh+'.png';
+    link.href=dataUrl;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  }catch(e){
+    if(e.name!=='AbortError') alert('圖片生成失敗，請截圖儲存。');
+  }finally{ btn.innerHTML=orig; btn.disabled=false; }
+}
+
+function copyResult(){
+  const t=TYPES[finalType];
+  const text=`【金錢人格測驗結果】\n類型：${t.zh}（${t.en}）\n${t.motto}\n\nMori 觀點：${t.mori}\n\n→ 測一測你的金錢人格：${window.location.href}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target.closest('button'), orig=btn.innerHTML;
+    btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已複製';
+    setTimeout(()=>btn.innerHTML=orig,2000);
+  }).catch(()=>{});
+}
+
+/* ── JS：12. PDF（全 inline style，不依賴 CSS 變數） ── */
+function buildPDFHTML(t){
+  const traitHtml=t.trait.text.replace(/<strong>/g,`<strong style="color:${t.colorB}">`);
+  return `<div style="background:#0A0A0F;font-family:'Noto Sans TC',sans-serif;width:680px;box-sizing:border-box;padding-bottom:40px">
+  <div style="height:4px;background:linear-gradient(90deg,${t.color},${t.colorB})"></div>
+  <div style="padding:40px 44px 32px;text-align:center">
+    <div style="display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid ${t.colorB};color:${t.colorB};margin-bottom:18px">金錢人格類型</div>
+    <div style="font-size:56px;margin-bottom:12px">${t.emoji}</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#9090A8;text-transform:uppercase;margin-bottom:6px">${t.en}</div>
+    <div style="font-size:40px;font-weight:900;color:#FFFFFF;margin-bottom:10px;line-height:1.2">${t.zh}</div>
+    <div style="font-size:14px;font-style:italic;color:#9090A8;max-width:380px;margin:0 auto;line-height:1.7">${t.motto}</div>
+  </div>
+  <div style="margin:0 32px 12px;background:${t.trait.bg};border:1px solid ${t.color}66;border-radius:16px;padding:18px 22px;display:flex;gap:14px;align-items:flex-start">
+    <div style="font-size:22px;flex-shrink:0;margin-top:2px">${t.trait.icon}</div>
+    <div style="font-size:13.5px;color:#9090A8;line-height:1.7">${traitHtml}</div>
+  </div>
+  <div style="margin:0 32px 12px;background:#14141F;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:26px 28px">
+    <div style="margin-bottom:22px">
+      <div style="font-size:17px;font-weight:900;color:#EDEFF5;margin-bottom:10px">你的金錢模式</div>
+      <div style="font-size:14px;color:#9090A8;line-height:1.85">${t.pattern}</div>
+    </div>
+    <div style="margin-bottom:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:17px;font-weight:900;color:#EDEFF5;margin-bottom:10px">這背後的心理根源</div>
+      <div style="font-size:14px;color:#9090A8;line-height:1.85">${t.root}</div>
+    </div>
+    <div style="padding-top:20px;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:17px;font-weight:900;color:#EDEFF5;margin-bottom:10px">《致富心態》給你的行動處方</div>
+      <div style="font-size:14px;color:#9090A8;line-height:1.85">${t.fix}</div>
+    </div>
+  </div>
+  <div style="margin:0 32px 0;background:rgba(196,169,106,.06);border:1px solid rgba(196,169,106,.2);border-radius:16px;padding:26px 28px">
+    <div style="font-size:17px;font-weight:900;color:#C4A96A;margin-bottom:10px">Mori 觀點</div>
+    <div style="font-size:14px;color:#9090A8;line-height:1.85;font-style:italic">${t.mori}</div>
+  </div>
+  <div style="text-align:center;padding:24px 44px 0">
+    <div style="font-size:11px;color:rgba(144,144,168,.35);letter-spacing:.04em">金錢人格測驗 by Mori｜致富心態 × 財務心理診斷</div>
+  </div>
+</div>`;
+}
+
+async function downloadPDF(){
+  const btn=document.getElementById('dlBtn'), orig=btn.innerHTML;
+  btn.innerHTML='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 產生中…';
+  btn.disabled=true;
+  const target=document.getElementById('pdf-target');
+  try{
+    if(!window.html2canvas){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'); }
+    const t=TYPES[finalType];
+    target.innerHTML=buildPDFHTML(t);
+    target.style.display='block';
+    await new Promise(r=>setTimeout(r,120));
+    const canvas=await html2canvas(target,{scale:2,useCORS:true,backgroundColor:'#0A0A0F',logging:false,width:680,windowWidth:680});
+    target.style.display='none';
+    let ok=false;
+    try{
+      if(!window.jspdf){ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'); }
+      const {jsPDF}=window.jspdf;
+      const w=210,h=Math.ceil(w*(canvas.height/canvas.width));
+      const pdf=new jsPDF({unit:'mm',format:[w,h],orientation:'portrait'});
+      pdf.addImage(canvas.toDataURL('image/jpeg',.93),'JPEG',0,0,w,h);
+      pdf.save(`金錢人格報告_${t.zh}.pdf`); ok=true;
+    }catch(e){}
+    if(!ok){
+      const a=document.createElement('a'); a.download=`金錢人格_${t.zh}.png`; a.href=canvas.toDataURL('image/png');
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+  }catch(e){ target.style.display='none'; alert('產生失敗，請截圖儲存。'); }
+  finally{ btn.innerHTML=orig; btn.disabled=false; }
+}
+
+/* ── JS：13. 重測 ── */
+function retake(){
+  currentQ=0;picked=null;answers=[];finalType='';
+  surveyAnswers={q1:'',q2:'',q3:''};
+  symPicked.clear();
+  document.querySelectorAll('.sym-item').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('symCount').textContent='請至少選一個，開始精準診斷';
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('emailInp').value='';
+  document.getElementById('emailInp').disabled=false;
+  document.getElementById('emailDone').style.display='none';
+  document.getElementById('surveyResultBox').style.display='none';
+  document.getElementById('unlockBtn').disabled=true;
+  document.querySelectorAll('.s-opt').forEach(el=>el.classList.remove('picked'));
+  show('screen-welcome');
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── JS：14. Cursor ── */
+(function(){
+  const hp=window.matchMedia?.('(pointer: fine)').matches;
+  const nm=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if(!hp||nm) return;
+  const ring=document.getElementById('cur-ring'),dot=document.getElementById('cur-dot'),spot=document.getElementById('cursor-spotlight');
+  let sx=-200,sy=-200,rx=-200,ry=-200;
+  window.addEventListener('mousemove',e=>{
+    sx=e.clientX;sy=e.clientY;
+    dot.style.transform=`translate3d(${sx}px,${sy}px,0) translate(-50%,-50%)`;
+    spot.style.background=`radial-gradient(220px at ${sx}px ${sy}px,rgba(196,160,64,.15),transparent 70%)`;
+    const active=e.target instanceof Element&&!!e.target.closest('a,button,[role="button"],input,.sym-item,.opt,.s-opt');
+    ring.classList.toggle('is-locked',active);
+  },{passive:true});
+  window.addEventListener('mousedown',()=>ring.classList.add('is-down'),{passive:true});
+  window.addEventListener('mouseup',()=>ring.classList.remove('is-down'),{passive:true});
+  (function loop(){rx+=(sx-rx)*.18;ry+=(sy-ry)*.18;ring.style.transform=`translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;requestAnimationFrame(loop);})();
+})();
+
+/* ── JS：15. Particles ── */
+window.addEventListener('load',()=>{
+  if(window.particlesJS) particlesJS('particles-js',{
+    particles:{number:{value:38,density:{enable:true,value_area:900}},color:{value:'#C4A96A'},shape:{type:'circle'},
+      opacity:{value:.15,random:true,anim:{enable:true,speed:.6,opacity_min:.05,sync:false}},size:{value:2,random:true},
+      line_linked:{enable:true,distance:160,color:'#C4A040',opacity:.07,width:1},
+      move:{enable:true,speed:.5,direction:'none',random:true,out_mode:'out'}},
+    interactivity:{detect_on:'canvas',events:{onhover:{enable:true,mode:'repulse'},onclick:{enable:false}},modes:{repulse:{distance:80,duration:.4}}},
+    retina_detect:true,
+  });
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</body>
+</html>
