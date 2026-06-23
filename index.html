@@ -96,7 +96,9 @@ body::before{content:'';position:fixed;inset:0;background:
 .opt.picked .opt-ltr{background:var(--acc);border-color:var(--acc);color:#0A0A0F}
 .opt-txt{font-size:14px;line-height:1.6;color:var(--muted);transition:var(--ease)}
 .opt.picked .opt-txt{color:var(--text)}
-.quiz-nav{display:flex;justify-content:flex-end;margin-top:20px}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.btn-prev-q{background:transparent;border:1px solid var(--border);border-radius:100px;padding:10px 22px;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:inherit;transition:var(--ease)}
+.btn-prev-q:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
 .btn-next{background:var(--s2);border:1.5px solid var(--border);border-radius:100px;padding:12px 32px;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;transition:var(--ease)}
 .btn-next:not(:disabled):hover{border-color:var(--gold);color:var(--text)}
 .btn-next:disabled{opacity:.35;cursor:not-allowed}
@@ -285,6 +287,7 @@ body::before{content:'';position:fixed;inset:0;background:
     <div class="q-text" id="qText"></div>
     <div class="opts" id="optList"></div>
     <div class="quiz-nav">
+      <button class="btn-prev-q" id="btnPrev" onclick="prevQ()">← 返回首頁</button>
       <button class="btn-next" id="nextBtn" onclick="nextQ()" disabled>下一題 →</button>
     </div>
   </div>
@@ -628,6 +631,15 @@ function renderQ(){
   const btn=document.getElementById('nextBtn');
   btn.disabled=true; btn.classList.remove('ready');
   btn.textContent = currentQ<QS.length-1?'下一題 →':'查看結果 →';
+  const prevType=answers[currentQ];
+  if(prevType!==undefined&&prevType!==null){
+    document.querySelectorAll('.opt').forEach((el,i)=>{
+      if(q.opts[i]&&q.opts[i].t===prevType){ el.classList.add('picked'); picked=prevType; }
+    });
+    btn.disabled=false; btn.classList.add('ready');
+  }
+  const pb=document.getElementById('btnPrev');
+  if(pb) pb.textContent=currentQ===0?'← 返回首頁':'← 上一題';
 }
 function pickOpt(el,type){
   document.querySelectorAll('.opt').forEach(o=>o.classList.remove('picked'));
@@ -637,8 +649,13 @@ function pickOpt(el,type){
 }
 function nextQ(){
   if(!picked) return;
-  answers.push(picked);
+  answers[currentQ]=picked;
   if(currentQ<QS.length-1){ currentQ++; renderQ(); } else { doCalc(); }
+}
+function prevQ(){
+  if(currentQ===0){ show('screen-welcome'); return; }
+  currentQ--;
+  renderQ();
 }
 
 /* ── JS：7. 計分邏輯 ── */
@@ -654,7 +671,7 @@ function doCalc(){
   setTimeout(()=>{
     clearInterval(iv); barEl.style.width='100%';
     const scores={F:0,V:0,C:0,S:0,M:0,K:0};
-    answers.forEach(t=>{if(scores[t]!==undefined)scores[t]++;});
+    answers.filter(Boolean).forEach(t=>{if(scores[t]!==undefined)scores[t]++;});
     let best=null,bestScore=-1;
     ['F','V','C','S','M','K'].forEach(k=>{if(scores[k]>bestScore){bestScore=scores[k];best=k;}});
     finalType=best;
